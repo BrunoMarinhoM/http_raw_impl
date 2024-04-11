@@ -5,40 +5,6 @@ const csock = @cImport(@cInclude("sys/socket.h"));
 const c_inet_in = @cImport(@cInclude("netinet/in.h"));
 const inet = @cImport(@cInclude("arpa/inet.h"));
 
-const HTTP_STATUS = enum {
-    ok,
-    created,
-    accepted,
-    non_authoritative_information,
-    no_content,
-    reset_content,
-    partial_content,
-    multi_status,
-    already_reported,
-    im_used,
-    multiple_choices,
-    moved_permanently,
-    found,
-    see_other,
-    not_modified,
-    use_proxy,
-    unused,
-    temporary_redirect,
-    permanent_redirect,
-    bad_request,
-    unauthorized,
-    payment_required,
-    forbidden,
-    not_found,
-    method_not_allowed,
-    not_acceptable,
-    proxy_auth_required,
-    request_timeout,
-    internal_server_error,
-};
-
-const HTTP_MESSSEGE = struct {};
-
 pub fn main() !void {
     //create the socket
 
@@ -86,13 +52,13 @@ pub fn main() !void {
             return;
         }
 
-        var buff_client = std.mem.zeroes([256]u8);
+        // var buff_client = std.mem.zeroes([256]u8);
 
-        _ = try std.posix.read(accepted, &buff_client);
+        // _ = try std.posix.read(accepted, &buff_client);
 
-        print("accepted file -> _____\n{s}\n_____\n", .{buff_client});
+        // print("accepted file -> _____\n{s}\n_____\n", .{buff_client});
 
-        const send = try std.posix.send(accepted, "HTTP/1.1 200 OK\r\nDate: Mon, 27 Jul 2009 12:28:53 GMT\r\nServer: Apache\r\nLast-Modified: Wed, 22 Jul 2009 19:15:56 GMT\r\nETag: \"34aa387-d-1568eb00\"\r\nAccept-Ranges: bytes\r\nContent-Length: 11\r\nVary: Accept-Encoding\r\nContent-Type: text/plain\r\n\r\n\nHELLO WORLD\n", 0);
+        const send = try std.posix.send(accepted, "HTTP/1.1 200 OK\r\nDate: Mon, 27 Jul 2009 12:28:53 GMT\r\nServer: Apache\r\nLast-Modified: Wed, 22 Jul 2009 19:15:56 GMT\r\nETag: \"34aa387-d-1568eb00\"\r\nAccept-Ranges: bytes\r\nContent-Length: 12r\nVary: Accept-Encoding\r\nContent-Type: text/plain\r\n\r\n\nHELLO WORLD\n", 0);
 
         if (send < 0) {
             print("did not send\n", .{});
