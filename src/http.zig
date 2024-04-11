@@ -34,9 +34,43 @@ const HTTP_STATUS_ENUM = enum {
 };
 
 const HTTP_STATUS = struct {
+    stat: HTTP_STATUS_ENUM,
+
     const Self = @This();
-    pub fn generate_str(self: Self) []const []u8 {
-        _ = self;
+
+    pub fn get_num(self: Self) !u16 {
+        return switch (self.stat) {
+            .ok => 200,
+            .created => 201,
+            .accepted => 202,
+            .non_authoritative_information => 203,
+            .no_content => 204,
+            .reset_content => 205,
+            .partial_content => 206,
+            .multi_status => 207,
+            .already_reported => 208,
+            .im_used => 226,
+            .multiple_choices => 300,
+            .moved_permanently => 301,
+            .found => 302,
+            .see_other => 303,
+            .not_modified => 304,
+            .use_proxy => 305,
+            .unused => 306,
+            .temporary_redirect => 307,
+            .permanent_redirect => 308,
+            .bad_request => 400,
+            .unauthorized => 401,
+            .payment_required => 402,
+            .forbidden => 403,
+            .not_found => 404,
+            .method_not_allowed => 405,
+            .not_acceptable => 406,
+            .proxy_auth_required => 407,
+            .request_timeout => 408,
+            .internal_server_error => 500,
+            //TODO: implement the rest
+        };
     }
 };
 
@@ -103,7 +137,18 @@ pub const HTTP_START_LINE = struct {
     }
 };
 
-pub const HTTP_HEADER = struct {};
+pub const HTTP_HEADER_FIELD = union {
+    name: []const []u8,
+    value: []const []u8,
+    content: ?[]const []u8, //maybe this one makes sense
+    vchar: ?[]const []u8, //not even a single clue
+    obs_fold: ?[]const []u8, //not a clue
+
+};
+
+pub const HTTP_HEADER = struct {
+    fields: []HTTP_HEADER_FIELD,
+};
 
 pub const HTTP_BODY = struct {};
 
@@ -114,5 +159,9 @@ pub const HTTP_MESSSEGE = struct {
 };
 
 pub fn main() !void {
+    const test_s = HTTP_STATUS{ .stat = .proxy_auth_required };
+
+    std.debug.print("{any}\n", .{try test_s.get_num()});
+
     return;
 }
